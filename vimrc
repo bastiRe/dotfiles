@@ -1,12 +1,23 @@
 inoremap jk <Esc>
-inoremap kj <Esc>
 let mapleader = "\<Space>"
 runtime macros/matchit.vim
 syntax enable
-set background=light
+
+"General config
 colorscheme solarized
 let g:airline_theme='solarized'
+set background=light
 set nu
+set ruler
+set nocompatible
+set nobackup
+set nowritebackup
+set hidden
+set lazyredraw
+set history=100
+set scrolloff=4
+set incsearch
+set autowrite
 
 " adapt to german keyboard
 map ü <C-]>
@@ -15,6 +26,20 @@ map ä ]
 map Ö {
 map Ä }
 map ß /
+
+" better handling of wrapped lines
+nmap j gj
+nmap k gk
+
+"LEADER commands
+
+" Split edit vim rc
+nmap <leader>vr :sp $MYVIMRC<cr>
+" Source vimrc
+nmap <leader>so :source $MYVIMRC<cr>
+nmap <leader>v :vnew <C-r>=escape(expand("%:p:h"), ' ') . '/'<cr>
+nmap <leader>h :new <C-r>=escape(expand("%:p:h"), ' ') . '/'<cr>
+
 
 set noswapfile
 set clipboard=unnamedplus
@@ -28,6 +53,7 @@ set shiftwidth=2
 " On pressing tab, insert 4 spaces
 set expandtab
 
+" Packages
 packadd minpac
 call minpac#init()
 
@@ -39,6 +65,9 @@ call minpac#add('mileszs/ack.vim')
 call minpac#add('pangloss/vim-javascript')
 call minpac#add('mxw/vim-jsx')
 call minpac#add('w0rp/ale')
+call minpac#add('tpope/vim-surround')
+call minpac#add('tpope/vim-repeat')
+call minpac#add('tpope/vim-commentary')
 call minpac#add('tpope/vim-fugitive')
 call minpac#add('vim-airline/vim-airline')
 call minpac#add('vim-airline/vim-airline-themes')
