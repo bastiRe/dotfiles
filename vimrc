@@ -8,6 +8,7 @@ colorscheme solarized
 let g:airline_theme='solarized'
 set background=light
 set nu
+set relativenumber
 set ruler
 set nocompatible
 set nobackup
@@ -73,6 +74,10 @@ call minpac#add('vim-airline/vim-airline')
 call minpac#add('vim-airline/vim-airline-themes')
 call minpac#add('mustache/vim-mustache-handlebars')
 call minpac#add('mattn/emmet-vim')
+call minpac#add('jiangmiao/auto-pairs')
+call minpac#add('ruanyl/vim-fixmyjs')
+call minpac#add('leafgarland/typescript-vim')
+call minpac#add('scrooloose/nerdtree')
 
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'
@@ -100,4 +105,14 @@ autocmd VimResized * :wincmd =
 nnoremap <leader>- :wincmd _<cr>:wincmd \|<cr>
 nnoremap <leader>= :wincmd =<cr>
 let g:user_emmet_leader_key='<C-Z>'
+
+"configure fixmyjs
+let g:fixmyjs_engine = 'eslint'
+let g:fixmyjs_rc_filename = ['.eslintrc', '.eslintrc.json']
+" use linting tool installed locally in node_modules folder
+let g:fixmyjs_use_local = 1
+
+noremap <Leader>f :Fixmyjs<CR>
+map <C-n> :NERDTreeToggle<CR>
+
 
