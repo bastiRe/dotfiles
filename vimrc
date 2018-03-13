@@ -1,10 +1,8 @@
 inoremap jk <Esc>
 let mapleader = "\<Space>"
 runtime macros/matchit.vim
-syntax enable
 
 "General config
-colorscheme solarized
 let g:airline_theme='solarized'
 set background=light
 set nu
@@ -43,7 +41,7 @@ nmap <leader>h :new <C-r>=escape(expand("%:p:h"), ' ') . '/'<cr>
 
 
 set noswapfile
-set clipboard=unnamedplus
+set clipboard+=unnamed
 
 
 filetype plugin indent on
@@ -54,30 +52,41 @@ set shiftwidth=2
 " On pressing tab, insert 4 spaces
 set expandtab
 
-" Packages
-packadd minpac
-call minpac#init()
+" Install vim plug
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
+      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 
-call minpac#add('altercation/vim-colors-solarized')
-call minpac#add('k-takata/minpac', {'type': 'opt'})
-call minpac#add('ctrlpvim/ctrlp.vim')
-call minpac#add('christoomey/vim-tmux-navigator')
-call minpac#add('mileszs/ack.vim')
-call minpac#add('pangloss/vim-javascript')
-call minpac#add('mxw/vim-jsx')
-call minpac#add('w0rp/ale')
-call minpac#add('tpope/vim-surround')
-call minpac#add('tpope/vim-repeat')
-call minpac#add('tpope/vim-commentary')
-call minpac#add('tpope/vim-fugitive')
-call minpac#add('vim-airline/vim-airline')
-call minpac#add('vim-airline/vim-airline-themes')
-call minpac#add('mustache/vim-mustache-handlebars')
-call minpac#add('mattn/emmet-vim')
-call minpac#add('jiangmiao/auto-pairs')
-call minpac#add('ruanyl/vim-fixmyjs')
-call minpac#add('leafgarland/typescript-vim')
-call minpac#add('scrooloose/nerdtree')
+" Packages
+call plug#begin('~/.vim/plugged')
+Plug 'altercation/vim-colors-solarized'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'christoomey/vim-tmux-navigator'
+Plug 'mileszs/ack.vim'
+Plug 'pangloss/vim-javascript'
+Plug 'mxw/vim-jsx'
+Plug 'w0rp/ale'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'mustache/vim-mustache-handlebars'
+Plug 'mattn/emmet-vim'
+Plug 'jiangmiao/auto-pairs'
+Plug 'ruanyl/vim-fixmyjs'
+Plug 'leafgarland/typescript-vim'
+Plug 'scrooloose/nerdtree'
+
+call plug#end()
+
+" Solarized settings
+syntax enable
+set background=light
+colorscheme solarized
 
 if executable('ag')
   let g:ackprg = 'ag --vimgrep'

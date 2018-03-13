@@ -1,8 +1,10 @@
+
 # If you come from bash you might have to change your $PATH.
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/Development/dotfiles/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/bastire/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -84,10 +86,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-source /usr/local/share/chruby/chruby.sh
-source /usr/local/opt/chruby/share/chruby/auto.sh
 alias tmux="TERM=screen-256color-bce tmux"
-export PATH="~/dotfiles/tat.sh:/usr/local/opt/ansible@2.0/bin:$PATH"
 
 # terminal vim
 bindkey -M viins 'jk' vi-cmd-mode  # @todo - THIS DOES NOT WORK?
@@ -103,39 +102,3 @@ ensure_tmux_is_running() {
 
 ensure_tmux_is_running
 
-# Base16 Solarized Light for fzf
-# Author: Ethan Schoonover (http://ethanschoonover.com/solarized)
-
-_gen_fzf_default_opts() {
-
-local color00='#fdf6e3'
-local color01='#eee8d5'
-local color02='#93a1a1'
-local color03='#839496'
-local color04='#657b83'
-local color05='#586e75'
-local color06='#073642'
-local color07='#002b36'
-local color08='#dc322f'
-local color09='#cb4b16'
-local color0A='#b58900'
-local color0B='#859900'
-local color0C='#2aa198'
-local color0D='#268bd2'
-local color0E='#6c71c4'
-local color0F='#d33682'
-
-export FZF_DEFAULT_OPTS="
-  --height 40% --border
-  --color=bg+:$color01,bg:$color00,spinner:$color0C,hl:$color0D
-  --color=fg:$color04,header:$color0D,info:$color0A,pointer:$color0C
-  --color=marker:$color0C,fg+:$color06,prompt:$color0A,hl+:$color0D
-"
-
-}
-
-_gen_fzf_default_opts
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-export ANDROID_HOME=/usr/local/opt/android-sdk
