@@ -41,7 +41,7 @@ nmap <leader>h :new <C-r>=escape(expand("%:p:h"), ' ') . '/'<cr>
 
 
 set noswapfile
-set clipboard+=unnamed
+set clipboard=unnamed
 
 
 filetype plugin indent on
