@@ -3,6 +3,9 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=$HOME/Development/dotfiles/bin:$PATH
 
+# Add android platformtools to path
+export PATH=/Users/sreh/Library/Android/sdk/platform-tools:$PATH
+
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 
