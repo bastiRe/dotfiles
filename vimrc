@@ -4,9 +4,9 @@ runtime macros/matchit.vim
 
 let g:python2_host_prog = '/usr/local/bin/python'
 let g:python3_host_prog = '/usr/local/bin/python3'
+let g:gruvbox_italic=1
 
 "General config
-let g:airline_theme='solarized'
 set nu
 set relativenumber
 set ruler
@@ -61,7 +61,7 @@ call plug#begin('~/.vim/plugged')
 " Skin-Packages
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'altercation/vim-colors-solarized'
+Plug 'morhetz/gruvbox'
 " Navigating/Text Plugins
 Plug 'scrooloose/nerdtree'
 Plug 'christoomey/vim-tmux-navigator'
@@ -74,6 +74,7 @@ Plug 'jiangmiao/auto-pairs'
 Plug 'mattn/emmet-vim'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
+Plug 'wincent/terminus'
 " Syntax Highlighting PACKAGES
 Plug 'w0rp/ale'
 Plug 'pangloss/vim-javascript'
@@ -101,7 +102,7 @@ let g:ale_fix_on_save = 1
 " Solarized settings
 syntax enable
 set background=dark
-colorscheme solarized
+colorscheme gruvbox
 
 " Completion Manager Settings
 set shortmess+=c
