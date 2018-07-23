@@ -24,7 +24,7 @@ ZSH_THEME="spaceship"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 plugins=(git vi-mode git-flow history-substring-search zsh-syntax-highlighting)
-plugins+=(zsh-nvm)
+plugins+=(zsh-completions)
 
 source $ZSH/oh-my-zsh.sh
 
