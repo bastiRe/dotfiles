@@ -26,7 +26,7 @@ set noswapfile
 set clipboard=unnamed
 filetype plugin on
 filetype plugin indent on
-set omnifunc=syntaxcomplete#Complete
+set showcmd " show incomplete commands
 
 " show existing tab with 2 spaces width
 set tabstop=2
@@ -37,9 +37,6 @@ set expandtab
 
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
-
-" Don't scan included files for keyword completion (too slow)
-set complete-=i
 
 " better handling of wrapped lines
 nmap j gj
@@ -87,18 +84,75 @@ call plug#begin('~/.vim/plugged')
   Plug 'junegunn/fzf.vim'
   Plug 'wincent/terminus'
   Plug 'tpope/vim-fugitive'
-  " Syntax Highlighting PACKAGES
-  Plug 'w0rp/ale'
   Plug 'ElmCast/elm-vim'
   Plug 'pangloss/vim-javascript'
   Plug 'mxw/vim-jsx'
-  Plug 'leafgarland/typescript-vim'
-  " Autocomplete 
-  Plug 'autozimu/LanguageClient-neovim', {
-      \ 'branch': 'next',
-      \ 'do': 'bash install.sh',
-      \ }
-  Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  " Syntax Highlighting PACKAGES
+  " ALE {{{
+    Plug 'w0rp/ale' " Asynchonous linting engine
+    let g:ale_set_highlights = 0
+    let g:ale_change_sign_column_color = 0
+    let g:ale_sign_column_always = 1
+    let g:ale_sign_error = '✖'
+    let g:ale_sign_warning = '⚠'
+    let g:ale_echo_msg_error_str = '✖'
+    let g:ale_echo_msg_warning_str = '⚠'
+    let g:ale_echo_msg_format = '%severity% %s% [%linter%% code%]'
+    " let g:ale_completion_enabled = 1
+
+    let g:ale_linters = {
+        \   'javascript': ['eslint'],
+        \   'typescript': ['tsserver', 'tslint'],
+        \   'typescript.tsx': ['tsserver', 'tslint'],
+        \   'html': []
+        \}
+    let g:ale_fixers = {}
+    let g:ale_fixers['javascript'] = ['prettier']
+    let g:ale_fixers['typescript'] = ['prettier', 'tslint']
+    let g:ale_fixers['json'] = ['prettier']
+    let g:ale_fixers['css'] = ['prettier']
+    let g:ale_javascript_prettier_use_local_config = 1
+    let g:ale_fix_on_save = 0
+    nmap <silent><leader>af :ALEFix<cr>
+  " }}}
+
+  " Completion {{{
+    if (has('nvim'))
+      Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    else
+      Plug 'Shougo/deoplete.nvim'
+      Plug 'roxma/nvim-yarp'
+      Plug 'roxma/vim-hug-neovim-rpc'
+    endif
+    let g:deoplete#enable_at_startup = 1
+  " }}}
+  "
+  " Language-Specific Configuration {{{
+  " html / templates {{{
+      " emmet support for vim - easily create markdup wth CSS-like syntax
+      Plug 'mattn/emmet-vim', { 'for': ['html', 'javascript.jsx']}
+      let g:user_emmet_settings = {
+      \  'javascript.jsx': {
+      \      'extends': 'jsx',
+      \  },
+      \}
+
+      " match tags in html, similar to paren support
+      Plug 'gregsexton/MatchTag', { 'for': 'html' }
+  " }}}
+
+  " TypeScript {{{
+      Plug 'ianks/vim-tsx', { 'for': 'typescript' }
+      Plug 'Shougo/vimproc.vim', { 'do': 'make' }
+
+      Plug 'mhartington/nvim-typescript', { 'do': './install.sh' }
+      let g:nvim_typescript#max_completion_detail=100
+      let g:nvim_typescript#diagnostics_enable=0
+  " }}}
+
+  Plug 'sheerun/vim-polyglot'
+  let g:vim_json_syntax_conceal = 0
+" }}}
 call plug#end()
 
 " FZF settings
@@ -107,43 +161,15 @@ nmap ; :Buffers<CR>
 nmap <C-p> :Files<CR>
 nmap <C-t> :Tags<CR>
 
-" Ale settings
-let g:ale_fixers = {}
-let g:ale_fixers['javascript'] = ['prettier']
-let g:ale_fixers['typescript'] = ['prettier']
-let g:ale_fix_on_save = 1
-
-" Solarized settings
+" Gruvbox settings
 syntax enable
 set background=dark
 colorscheme gruvbox
 
-" Use deoplete.
-let g:deoplete#enable_at_startup = 1
-" deoplete tab-complete
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
 
 " Language Server Settings
 " Required for operations modifying multiple buffers like rename.
 set hidden
-
-let g:LanguageClient_serverCommands = {
-    \ 'javascript': ['javascript-typescript-stdio'],
-    \ 'javascript.jsx': ['javascript-typescript-stdio'],
-    \ 'typescript': ['javascript-typescript-stdio'],
-    \ }
-
-" <leader>ld to go to definition
-autocmd FileType javascript nnoremap <buffer>
-  \ <leader>ld :call LanguageClient_textDocument_definition()<cr>
-" <leader>lh for type info under cursor
-autocmd FileType javascript nnoremap <buffer>
-  \ <leader>lh :call LanguageClient_textDocument_hover()<cr>
-" <leader>lr to rename variable under cursor
-autocmd FileType javascript nnoremap <buffer>
-  \ <leader>lr :call LanguageClient_textDocument_rename()<cr>
-autocmd FileType javascript nnoremap <buffer>
-  \ <leader>lf :call LanguageClient_textDocument_documentSymbol()<cr>
 
 " Emmet Settings
 let g:user_emmet_leader_key='<C-y>'
