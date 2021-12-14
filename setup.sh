@@ -1,7 +1,7 @@
 #!/bin/sh -e
 
 # Add necesseray dependencies
-brew install tmux neovim fzf zsh-completions reattach-to-user-namespace python3
+brew install tmux neovim fzf zsh-completions reattach-to-user-namespace python3 the_silver_searcher
 
 # Install oh-my-zsh
 { 

@@ -2,9 +2,10 @@ inoremap jk <Esc>
 let mapleader = "\<Space>"
 runtime macros/matchit.vim
 
+" more reliable syntax highlighting
+syntax sync minlines=300
+
 " Python settings vor NVIM
-let g:python2_host_prog = '/usr/local/bin/python'
-let g:python3_host_prog = '/usr/local/bin/python3'
 let g:gruvbox_italic=1
 
 " Line Numbers
@@ -38,6 +39,13 @@ set expandtab
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
 
+" Highlight line in current buffer
+augroup BgHighlight
+    autocmd!
+    autocmd WinEnter * set cul
+    autocmd WinLeave * set nocul
+augroup END
+
 " better handling of wrapped lines
 nmap j gj
 nmap k gk
@@ -53,6 +61,8 @@ nmap <leader>vr :sp $MYVIMRC<cr>
 nmap <leader>so :source $MYVIMRC<cr>
 nmap <leader>v :vnew <C-r>=escape(expand("%:p:h"), ' ') . '/'<cr>
 nmap <leader>h :new <C-r>=escape(expand("%:p:h"), ' ') . '/'<cr>
+
+nmap <leader>sy :syntax sync fromstart<cr>
 
 " autocheck file for updates after 4s of inactivity in normal mode
 set autoread
@@ -84,8 +94,9 @@ call plug#begin('~/.vim/plugged')
   Plug 'junegunn/fzf.vim'
   Plug 'wincent/terminus'
   Plug 'tpope/vim-fugitive'
-  Plug 'ElmCast/elm-vim'
   Plug 'pangloss/vim-javascript'
+  Plug 'posva/vim-vue'
+  Plug 'jparise/vim-graphql'
   Plug 'mxw/vim-jsx'
   " Syntax Highlighting PACKAGES
   " ALE {{{
@@ -101,18 +112,21 @@ call plug#begin('~/.vim/plugged')
     " let g:ale_completion_enabled = 1
 
     let g:ale_linters = {
-        \   'javascript': ['eslint'],
+        \   'javascript': ['eslint', 'stylelint'],
         \   'typescript': ['tsserver', 'tslint'],
         \   'typescript.tsx': ['tsserver', 'tslint'],
         \   'html': []
         \}
+
     let g:ale_fixers = {}
-    let g:ale_fixers['javascript'] = ['prettier']
+    let g:ale_fixers['javascript'] = ['prettier', 'eslint']
+    let g:ale_fixers['vue'] = ['prettier', 'eslint']
     let g:ale_fixers['typescript'] = ['prettier', 'tslint']
     let g:ale_fixers['json'] = ['prettier']
     let g:ale_fixers['css'] = ['prettier']
     let g:ale_javascript_prettier_use_local_config = 1
-    let g:ale_fix_on_save = 0
+    let g:ale_open_list = 0
+    let g:ale_fix_on_save = 1
     nmap <silent><leader>af :ALEFix<cr>
   " }}}
 
@@ -124,7 +138,31 @@ call plug#begin('~/.vim/plugged')
       Plug 'roxma/nvim-yarp'
       Plug 'roxma/vim-hug-neovim-rpc'
     endif
+    Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
     let g:deoplete#enable_at_startup = 1
+    inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
+
+    let g:LanguageClient_serverCommands = {
+        \ 'javascript': ['javascript-typescript-stdio'],
+        \ 'javascript.jsx': ['javascript-typescript-stdio'],
+        \ 'typescript': ['javascript-typescript-stdio'],
+        \ 'vue': ['vls']
+        \ }
+
+    " <leader>ld to go to definition
+    autocmd FileType javascript nnoremap <buffer>
+      \ <leader>ld :call LanguageClient_textDocument_definition()<cr>
+    " <leader>lh for type info under cursor
+    autocmd FileType javascript nnoremap <buffer>
+      \ <leader>lh :call LanguageClient_textDocument_hover()<cr>
+    " <leader>lr to rename variable under cursor
+    autocmd FileType javascript nnoremap <buffer>
+      \ <leader>lr :call LanguageClient_textDocument_rename()<cr>
+    autocmd FileType javascript nnoremap <buffer>
+      \ <leader>lf :call LanguageClient_textDocument_documentSymbol()<cr>
   " }}}
   "
   " Language-Specific Configuration {{{
@@ -149,6 +187,7 @@ call plug#begin('~/.vim/plugged')
       let g:nvim_typescript#max_completion_detail=100
       let g:nvim_typescript#diagnostics_enable=0
   " }}}
+  
 
   Plug 'sheerun/vim-polyglot'
   " Startify: Fancy startup screen for vim {{{
@@ -194,7 +233,7 @@ call plug#end()
 " FZF settings
 let g:fzf_nvim_statusline = 0 " disable statusline overwriting
 nmap ; :Buffers<CR>
-nmap <C-p> :Files<CR>
+nmap <C-p> :FZF<CR>
 nmap <C-t> :Tags<CR>
 
 " Gruvbox settings
@@ -208,12 +247,7 @@ colorscheme gruvbox
 set hidden
 
 " Emmet Settings
-let g:user_emmet_leader_key='<C-y>'
-let g:user_emmet_settings = {
-  \  'javascript.jsx' : {
-    \      'extends' : 'jsx',
-    \  },
-  \}
+let g:user_emmet_leader_key='<C-j>'
 
 
 " Use ag over grep
@@ -230,5 +264,5 @@ let g:airline#extensions#tabline#enabled = 1
 
 " NERDTree
 map <C-n> :NERDTreeToggle<CR>
-
-
+map <C-f> :NERDTreeFind<CR>
+let NERDTreeShowHidden=1
