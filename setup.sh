@@ -26,7 +26,7 @@ ln -f -s "$(pwd)/vimrc" ~/.vimrc
 
 mkdir ~/.config/nvim
 touch ~/.config/nvim/init.vim
-ln -f -s "$(pwd)/vimrc" ~/.config/nvim/init.vim
+ln -f -s "$(pwd)/init.vim" ~/.config/nvim/init.vim
 
 # Add terminfo for italics in tmux
 tic tmux-256color.terminfo
