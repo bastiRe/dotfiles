@@ -21,7 +21,7 @@ ZSH_THEME="spaceship"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-plugins=(git vi-mode git-flow history-substring-search zsh-syntax-highlighting)
+plugins=(git vi-mode git-flow history-substring-search zsh-syntax-highlighting fzf)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -34,22 +34,9 @@ autoload -U compinit && compinit
 export LC_ALL=en_US.UTF-8  
 export LANG=en_US.UTF-8
 
-# ssh
-# export SSH_KEY_PATH="~/.ssh/rsa_id"
-
 # FZF config
 # fzf via Homebrew
-if [ -e /usr/local/opt/fzf/shell/completion.zsh ]; then
-  source /usr/local/opt/fzf/shell/key-bindings.zsh
-  source /usr/local/opt/fzf/shell/completion.zsh
-fi
-
-# fzf + ag configuration
-if _has fzf && _has ag; then
-  export FZF_DEFAULT_COMMAND='ag --nocolor --ignore node_modules -g ""'
-  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-  export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
-fi
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # Add pyenv bins to path and activate it
 export PATH="$HOME/.pyenv/bin:$PATH"
@@ -86,9 +73,12 @@ alias ssh='TERM=xterm ssh'
 export LDFLAGS="-L/usr/local/opt/zlib/lib"
 export CPPFLAGS="-I/usr/local/opt/zlib/include"
 
+# Load rbenv by default
+eval "$(rbenv init - zsh)"
+
 # For pkg-config to find zlib you may need to set:
 export PKG_CONFIG_PATH="/usr/local/opt/zlib/lib/pkgconfig"
-# [[ /usr/local/bin/kubectl ]] && source <(kubectl completion zsh)
+[[ /usr/local/bin/kubectl ]] && source <(kubectl completion zsh)
 
 eval "$(fnm env)"
 fpath=($fpath "/Users/sebastian/.zfunctions")
