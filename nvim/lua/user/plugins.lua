@@ -62,8 +62,6 @@ return packer.startup(function(use)
 
   -- Colorschemes
   use "lunarvim/colorschemes" -- A bunch of colorschemes you can try out
-  use 'shaunsingh/nord.nvim'
-  use 'shaunsingh/solarized.nvim'
   use 'sainnhe/gruvbox-material'
 
   -- cmp plugins
