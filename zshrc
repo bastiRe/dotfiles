@@ -1,8 +1,12 @@
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/Development/dotfiles/bin:$PATH
+
 # Add postgres bin tools
 export PATH=/Applications/Postgres.app/Contents/Versions/latest/bin:$PATH
 
-# Add zellij tools
-export PATH=$HOME/Development/bin
+# Add pyenv bins to path
+export PATH="$HOME/.pyenv/bin:$PATH"
 
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
@@ -21,33 +25,36 @@ ZSH_THEME="spaceship"
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-plugins=(git vi-mode git-flow history-substring-search zsh-syntax-highlighting fzf)
+plugins=(git vi-mode git-flow history-substring-search zsh-syntax-highlighting)
+plugins+=(zsh-completions)
 
 source $ZSH/oh-my-zsh.sh
-
-# zsh completions
-plugins+=(zsh-completions)
-autoload -U compinit && compinit
-
 
 # Export correct language
 export LC_ALL=en_US.UTF-8  
 export LANG=en_US.UTF-8
 
+# ssh
+# export SSH_KEY_PATH="~/.ssh/rsa_id"
+
 # FZF config
 # fzf via Homebrew
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+if [ -e /usr/local/opt/fzf/shell/completion.zsh ]; then
+  source /usr/local/opt/fzf/shell/key-bindings.zsh
+  source /usr/local/opt/fzf/shell/completion.zsh
+fi
 
-# Add pyenv bins to path and activate it
-export PATH="$HOME/.pyenv/bin:$PATH"
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
+# fzf + ag configuration
+if _has fzf && _has ag; then
+  export FZF_DEFAULT_COMMAND='ag --nocolor --ignore node_modules -g ""'
+  export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
+fi
 
 # terminal vim
 bindkey -M viins 'jk' vi-cmd-mode  # @todo - THIS DOES NOT WORK?
 
-
-# Make nvvim default
+# Make vim default
 export VISUAL=nvim
 export EDITOR="$VISUAL"
 
@@ -55,9 +62,6 @@ export EDITOR="$VISUAL"
 fpath=(~/.zsh/completion $fpath)
 autoload -Uz compinit && compinit -i
 
-# Set Spaceship ZSH as a prompt
-autoload -U promptinit; promptinit
-prompt spaceship
 
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f '/Users/sebastianrehm/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/sebastianrehm/Downloads/google-cloud-sdk/path.zsh.inc'; fi
@@ -65,6 +69,10 @@ if [ -f '/Users/sebastianrehm/Downloads/google-cloud-sdk/path.zsh.inc' ]; then .
 # The next line enables shell command completion for gcloud.
 if [ -f '/Users/sebastianrehm/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sebastianrehm/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
 
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+  eval "$(pyenv virtualenv-init -)"
+fi
 
 # Prevents local TERM from affecting ssh.
 alias ssh='TERM=xterm ssh'
@@ -73,12 +81,21 @@ alias ssh='TERM=xterm ssh'
 export LDFLAGS="-L/usr/local/opt/zlib/lib"
 export CPPFLAGS="-I/usr/local/opt/zlib/include"
 
-# Load rbenv by default
-eval "$(rbenv init - zsh)"
-
 # For pkg-config to find zlib you may need to set:
 export PKG_CONFIG_PATH="/usr/local/opt/zlib/lib/pkgconfig"
 [[ /usr/local/bin/kubectl ]] && source <(kubectl completion zsh)
 
 eval "$(fnm env)"
 fpath=($fpath "/Users/sebastian/.zfunctions")
+
+eval "$(rbenv init - zsh)"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export PATH="$HOME/.rbenv/bin:$PATH"
+
+# Android Emulator Config
+export ANDROID_HOME=$HOME/Library/Android/sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
