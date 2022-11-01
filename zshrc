@@ -2,11 +2,14 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=$HOME/Development/dotfiles/bin:$PATH
 
+# setup local bin's (necessary for lunar vim)
+export PATH=$HOME/.local/bin:$PATH
+
 # Add postgres bin tools
-export PATH=/Applications/Postgres.app/Contents/Versions/latest/bin:$PATH
+# export PATH=/Applications/Postgres.app/Contents/Versions/latest/bin:$PATH
 
 # Add pyenv bins to path
-export PATH="$HOME/.pyenv/bin:$PATH"
+# export PATH="$HOME/.pyenv/bin:$PATH"
 
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
@@ -20,13 +23,12 @@ _has() {
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="spaceship"
-
 
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-plugins=(git vi-mode git-flow history-substring-search zsh-syntax-highlighting)
-plugins+=(zsh-completions)
+plugins=(git history-substring-search)
+# plugins+=(zsh-completions)
+
 
 source $ZSH/oh-my-zsh.sh
 
@@ -44,9 +46,9 @@ if [ -e /usr/local/opt/fzf/shell/completion.zsh ]; then
   source /usr/local/opt/fzf/shell/completion.zsh
 fi
 
-# fzf + ag configuration
-if _has fzf && _has ag; then
-  export FZF_DEFAULT_COMMAND='ag --nocolor --ignore node_modules -g ""'
+# fzf + rg configuration
+if _has fzf && _has rg; then
+  export FZF_DEFAULT_COMMAND='rg --nocolor --ignore node_modules -g ""'
   export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
   export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
 fi
@@ -63,32 +65,10 @@ fpath=(~/.zsh/completion $fpath)
 autoload -Uz compinit && compinit -i
 
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/sebastianrehm/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/sebastianrehm/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/sebastianrehm/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/sebastianrehm/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
-
-if command -v pyenv 1>/dev/null 2>&1; then
-  eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
-fi
-
 # Prevents local TERM from affecting ssh.
 alias ssh='TERM=xterm ssh'
 
-# For compilers to find zlib you may need to set:
-export LDFLAGS="-L/usr/local/opt/zlib/lib"
-export CPPFLAGS="-I/usr/local/opt/zlib/include"
 
-# For pkg-config to find zlib you may need to set:
-export PKG_CONFIG_PATH="/usr/local/opt/zlib/lib/pkgconfig"
-[[ /usr/local/bin/kubectl ]] && source <(kubectl completion zsh)
-
-eval "$(fnm env)"
-fpath=($fpath "/Users/sebastian/.zfunctions")
-
-eval "$(rbenv init - zsh)"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export PATH="$HOME/.rbenv/bin:$PATH"
@@ -99,3 +79,6 @@ export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/tools
 export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
+source /opt/homebrew/opt/spaceship/spaceship.zsh
+
+. /opt/homebrew/opt/asdf/libexec/asdf.sh
